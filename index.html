@@ -1,0 +1,275 @@
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="../js/d3/d3.min.js"></script>
+</head> 
+<script>
+
+$(function(){
+    jQuery.support.cors = true;
+    $("button").click(function(){
+
+    // User entered zip code
+        params1 = "&for=zip+code+tabulation+area:" + $("#zip1").val();
+        params2 = "&for=zip+code+tabulation+area:" + $("#zip2").val();
+            // Make async call to Census API service
+        $.ajax({
+            type: 'GET',
+            url: "http://api.census.gov/data/2013/acs5?key=459f53b5a87142d46b242740993ba02bb92fd584&get=B01003_001E,B06009_001E,B06009_002E,B06009_003E,B06009_004E,B06009_005E,B06009_006E" + params1,
+
+            success: function ( resp ) {                                                     
+                var values = resp[ 1 ];
+                var pop1 = parseInt(values[ 0 ],10);
+                var pctLessHighSchool = Math.round(values[ 2 ] / values[ 1] * 100);
+                var pctHighSchool = Math.round(values[ 3 ] / values[ 1] * 100);
+                var pctSomeCollege = Math.round(values[ 4 ] / values[ 1] * 100);
+                var pctCollege = Math.round(values[ 5 ] / values[ 1] * 100);
+                var pctGrad = Math.round(values[ 6 ] / values[ 1] * 100);
+              
+                $(".population.previous").val(pop1);
+                $("#pctLessHighSchool.previous").text( pctLessHighSchool );
+                $("#pctHighSchool.previous").text( pctHighSchool );
+                $("#pctSomeCollege.previous").text( pctSomeCollege );
+                $("#pctCollege.previous").text( pctCollege );
+                $("#pctGrad.previous").text( pctGrad );
+                makePreviousChart(pop1);
+            },                               
+            error: function (responseData, textStatus, errorThrown) {
+                console.log('GET failed.');
+            }
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: "http://api.census.gov/data/2011/acs5?key=459f53b5a87142d46b242740993ba02bb92fd584&get=B01003_001E,B06009_001E,B06009_002E,B06009_003E,B06009_004E,B06009_005E,B06009_006E" + params2,
+
+            success: function ( resp ) {      
+
+
+
+                                                           
+                var values2 = resp[ 1 ];
+                var pop2  = values2[ 0 ];
+                var pctLessHighSchool = Math.round(values2[ 2 ] / values2[ 1] * 100);
+                var pctHighSchool = Math.round(values2[ 3 ] / values2[ 1] * 100);
+                var pctSomeCollege = Math.round(values2[ 4 ] / values2[ 1] * 100);
+                var pctCollege = Math.round(values2[ 5 ] / values2[ 1] * 100);
+                var pctGrad = Math.round(values2[ 6 ] / values2[ 1] * 100);
+                
+                console.log(values2);
+
+                $(".population.current").val( parseInt(pop2) );
+                $("#pctLessHighSchool.current").text( pctLessHighSchool );
+                $("#pctHighSchool.current").text( pctHighSchool );
+                $("#pctSomeCollege.current").text( pctSomeCollege );
+                $("#pctCollege.current").text( pctCollege );
+                $("#pctGrad.current").text( pctGrad );
+                makeCurrentChart(pop2);
+            },                               
+            error: function (responseData, textStatus, errorThrown) {
+                console.log('GET failed.');
+                }
+        });  
+        
+        var consolidate = [];
+
+        function makePreviousChart(a) {
+            console.log("a" + a);
+            var dataOne = [];
+            dataOne.push(a);
+            reportOut(dataOne);
+
+        };
+
+
+        function makeCurrentChart(b) {
+            console.log("b" + b);
+            var data = [];
+            data.push(b);
+            reportOut(data);
+        };    
+
+        function reportOut(g) {
+            consolidate.push(g);
+            flat = consolidate.concat(consolidate);
+            console.log(flat);
+
+            
+        };
+
+
+        // function makePreviousChart(a) {
+        //     console.log(a);
+        //     var dataOne = [];
+        //     dataOne.push(a);
+
+        //     var xScale = d3.scale.linear()
+        //         .domain([0,d3.max(dataOne)])
+        //         .range([0,100]);
+
+        //     var chartLeft = canvas.append("g")
+        //         .attr("transform", "translate(500,0)")
+        //         .attr('id','barsLeft')
+        //         .selectAll('rect')
+        //         .data(dataOne)
+        //         .enter()
+        //         .append('rect')
+        //         .attr('height',19)
+        //         .attr({'x':0,'y':function(d,i){ return yScale(i)+19; }})
+        //         .style('fill',"red")
+        //         .attr('width',function(d){ return 0; });
+        //     var labels;   
+
+        //     var transit = d3.select("svg").selectAll("rect")
+        //                     .data(dataOne)
+        //                     .transition()
+        //                     .duration(1000) 
+        //                     .attr("width", function(d) {return xScale(d); });
+
+        // };
+
+
+        // function makeCurrentChart(b) {
+        //     console.log(b);
+        //     var data = [];
+        //     data.push(b);
+
+        //     var xScale = d3.scale.linear()
+        //         .domain([0,d3.max(data)])
+        //         .range([0, 100]);
+
+        //     var chartRight = canvas.append("g")
+        //         .attr("transform", "translate(500,0)")
+        //         .attr('id','barsRight')
+        //         .selectAll('rect')
+        //         .data(data)
+        //         .enter()
+        //         .append('rect')
+        //         .attr('height',19)
+        //         .attr({'x': function(d) {return 0 - xScale(d);},'y':function(d,i){ return yScale(i)+19; }})
+        //         .style('fill',"black")
+        //         .attr('width',function(d){ return 0; });
+        //     var labels;   
+
+        //     var transit = d3.select("svg").selectAll("rect")
+        //                     .data(data)
+        //                     .transition()
+        //                     .duration(1000) 
+        //                     .attr("width", function(d) {return xScale(d); });
+
+        // };
+             
+    });
+
+
+
+
+
+    var metrics = ["alabama","california"];
+    var canvas = d3.select("#canvas")
+        .append("svg")
+        .attr("width","100%")
+        .attr("height", 600);
+
+    var yScale = d3.scale.linear()
+        .domain([0,metrics.length])
+        .range([0,200]);
+
+    var yAxis = d3.svg.axis();
+    yAxis.orient('left')
+        .scale(yScale)
+        .tickSize(2)
+        .tickFormat(function(d,i){ return metrics[i]})
+        .tickValues(d3.range(metrics.length));
+
+    var yGAxis = canvas.append("g")
+        .attr("transform", "translate(500,10)")
+        .attr('id','yaxis')
+        .call(yAxis);
+
+
+}); 
+</script>
+
+
+ <body>
+<div id="entry">
+First ZIP Code: <input type="text" id="zip1" value="35121" />
+Latest ZIP Code: <input type="text" id="zip2" value="35205" />
+<button id="search">Search</button><br/>
+Pop1: <span class="previous  population"></span></br/>
+Percent Less than High School: <span class="previous" id="pctLessHighSchool"></span></br/>
+Percent High School: <span class="previous" id="pctHighSchool"></span></br/>
+Percent Some College: <span class="previous" id="pctSomeCollege"></span></br/>
+Percent College: <span class="previous" id="pctCollege"></span></br/>
+Percent Graduate Degree: <span class="previous" id="pctGrad"></span></br/>
+<br>
+
+Pop2:  <span class="current population"></span></br/>
+Percent Less than High School: <span class="current" id="pctLessHighSchool"></span></br/>
+Percent High School: <span class="current" id="pctHighSchool"></span></br/>
+Percent Some College: <span class="current" id="pctSomeCollege"></span></br/>
+Percent College: <span class="current" id="pctCollege"></span></br/>
+Percent Graduate Degree: <span class="current" id="pctGrad"></span></br/>
+</div>
+<div id="canvas"></div>
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="../css/app.css" />
+<script type='text/javascript'>
+
+var data = {
+    "data":[[1, 2, 3, 4, 5], [3, 2, 5, 1, 4]],
+    "label":[['apple', 'banana', 'carrot', 'bacon', 'egg']]
+};
+
+var slopeGraph = d3.custom.slopegraph();
+d3.select('body')
+    .datum(data)
+    .call(slopeGraph);
+
+slopeGraph.width(500);
+d3.select('body')
+    .call(slopeGraph);
+
+    </script>
+</body>
+</html>
+ 
+
+<!-- 
+
+
+
+
+
+                                                var values = resp[ 1 ];
+                                                var pop1  = values[ 0 ];
+                                                var name1 = values[ 1 ];
+                                                var pop2 = values[ 2 ];
+                                                var name2 = values[ 3 ];
+                                                console.log(values);
+                                                if ( values.length > 3 )
+                                                                $("#state-name").text( name );
+                                                else
+                                                                $("#county-name").text( Place );
+                                                                $("#pop").text( pop );
+                                                },
+                                error: function (responseData, textStatus, errorThrown) {
+                                                                console.log('GET failed.');
+                                                }
+                                });
+                });
+ }); 
+ </script>
+ <body>
+First ZIP Code: <input type="text" id="zip1" />
+Latest ZIP Code: <input type="text" id="zip2" />
+<button id="search">Search</button><br/>
+State: <span class="current" id="state-name"></span></br/>
+Place: <span class="current" id="county-name"></span><br/>
+Pop:  <span class="current" id="pop"></span></br/>
+</body>
+</html>
+
+       -->                                          
