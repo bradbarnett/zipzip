@@ -1,5 +1,231 @@
-#canvas {
-	width: 100%;
-	height: 600px;
-	background-color: #f3f3f3;
+body {
+    font-family: helvetica, arial, sans-serif;
+    font-size: 14px;
+    background-color: #DAD6D0; 
+    /*#ecddab*/
+}
+
+#top-section {
+    width: 100%;
+    display: block;
+    overflow: auto;
+    margin-bottom: 2rem;
+    text-align:center;
+}
+
+#middle-section * {
+    display: none;
+    transition: display .5s;
+}
+#title {
+    font-size: 250%;
+    display: inline;
+    font-family: 'Lato';
+    margin-bottom: 2rem;
+    color: chocolate;
+    position: absolute;
+    left: 1rem;
+    top: 1.2rem;
+    padding: 5px 10px;
+    border: 4px solid;  
+}
+
+#entry {
+    display: inline-block;
+    font-family: 'Lato';
+    margin-bottom: 2rem;
+    color: chocolate;
+    width: 20rem;
+
+}
+
+.divide-entry {
+    text-align:left;
+    width: 70%;
+}
+
+.divide-entry label {
+    text-align: right;
+}
+
+#entry button {
+    border: 2px solid chocolate;
+    background-color: #DAD6D0;
+    color: chocolate;
+    width: 5rem;
+    margin-top: -.5rem;
+    float: right;
+    padding: 5px;
+    transition: background-color .35s, color .35s;
+}
+
+#entry button:hover {
+    background-color: chocolate;
+    color: #DAD6D0;
+    font-weight: 600;
+}
+
+input { 
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px dotted chocolate;
+    font-family: lato;
+    text-align: center;
+    color: chocolate;
+    font-size: 200%;
+    width: 8rem;
+}
+
+table {
+    border-collapse: collapse;
+    font-size: 85%;
+    width
+}
+
+
+
+#table {
+    display: inline;
+    float: left;
+    min-width: 32.143em;
+    margin-right: 1em;
+}
+
+tr.data:hover {
+    background-color: #ccc;
+}
+
+td {
+    padding-right:1.5rem;
+
+}
+
+.endnote {
+    font-size: 85%;
+    font-style: italic;
+    text-align: right;
+}
+
+.category {
+    font-weight: 600;
+}
+
+.title {
+    padding-left: 2rem;
+}
+
+
+#chartCanvas {
+    min-width: 700px;
+    height: 500px;
+    /*background-color: #DAD6D0;*/
+    display: inline;
+    float: left;
+    font-size: 90%;
+}
+
+#question {
+     position: absolute;
+    top: 2.5em;
+    right: 25px;
+    color: #DAD6D0;
+    background-color: chocolate;
+    padding: 5px 10px;
+    border-radius: 0;
+    font-size: 90%;
+}
+
+
+#answer {
+    position: absolute;
+    top: 4.7em;
+    right: 25px;
+    background-color: #E4E1DB;
+    height: 200px;
+    width: 300px;
+    z-index: 99;
+    display: none;
+    padding: 10px 2px 5px 15px;
+    text-align: left;
+}
+
+.topLabel {
+    padding-bottom: 10px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    text-decoration: underline;
+}
+
+
+line {
+    stroke-width: 2;
+    transition: all 1s ease;
+}
+
+.legend-circle {
+    width: 200;
+    height: 20;
+}
+
+.data#population, .data#medianHouseholdIncome,.data#medianAge  {
+    font-style: italic;
+}
+
+.people {
+    stroke: #E45A3B;
+    stroke-weight: 2;
+    fill: #E45A3B;
+}
+
+.education {
+    fill: #019875;
+    stroke: #019875;
+    stroke-weight: 1;
+}
+
+.mobility {
+    fill: #68BCC3;    
+    stroke: #68BCC3;
+    stroke-weight: 1;
+}
+
+.housing {
+    fill: #F7CA18;    
+    stroke: #F7CA18;
+    stroke-weight: 2;
+}
+
+.legend-circle text {
+    stroke: none;
+
+}
+
+.right-labels {
+    visibility: hidden;
+}
+
+.matching {
+    stroke-width: 5;
+    font-weight: bold;
+    font-size: 36px;
+    visibility: visible;
+    transition: all 0.05s ease;
+}
+
+.yAxis path,
+.yAxis line {
+    fill: none;
+    stroke: black;
+    stroke-width: 1.5;
+    shape-rendering: crispEdges;
+}
+
+.xAxis path,
+.xAxis line {
+    fill: none;
+    stroke: none;
+    stroke-width: 0;
+    stroke-dasharray: 2 2;
+    shape-rendering: crispEdges;
 }
